@@ -1,0 +1,51 @@
+﻿@page "/ApartmentTypes"
+@inject IApartmentTypeService ApartmentTypeService
+@inject NavigationManager navigationManager
+
+<PageTitle>Apartment Types</PageTitle>
+
+<h3>ApartmentType</h3>
+@if (apartmentTypes == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Description</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var apartType in ApartmentTypeService.ApartmentTypes)
+            {
+                <tr>
+                    <td>@apartType.ApartmentTypeId</td>
+                    <td>@apartType.Description</td>
+                    <td>
+                        <button class="btn btn-primary" @onclick="(() => ShowApartmentType(apartType.ApartmentTypeId))"><i class="oi oi-pencil"></i></button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+<div>
+
+</div>
+@code {
+    private IEnumerable<ApartmentType> apartmentTypes;
+
+    protected override async Task OnInitializedAsync()
+    {
+        apartmentTypes = await ApartmentTypeService.GetApartmentTypes();
+    }
+
+    void ShowApartmentType(int id)
+    {
+        
+    }
+}

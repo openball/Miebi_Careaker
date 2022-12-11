@@ -1,0 +1,70 @@
+﻿@page "/people"
+@inject IPersonService PersonService
+@inject NavigationManager navigationManager
+
+<PageTitle>People</PageTitle>
+
+<h3>People</h3>
+
+@if (people == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>First Name</th>
+            <th>Middle Name</th>
+            <th>Last Name</th>
+            <th>Gender</th>
+            <th>Mobile</th>
+            <th>Email Address</th>
+            <th>Category</th>
+            <th>Active</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var person in PersonService.people)
+        {
+            <tr>
+                <td>@person.PersonId</td>
+                <td>@person.Firstname</td>
+                <td>@person.Middlename</td>
+                <td>@person.Lastname</td>
+                <td>@person.Gender.GenderType</td>
+                <td>@person.Mobile</td>
+                <td>@person.EmailAddress</td>
+                <td>@person.PersonCategory.CategoryDesc</td>
+                <td>@person.Active</td>
+                <td>
+                    <button class="btn btn-primary" @onclick="(() => ShowPerson(person.PersonId))"><i class="oi oi-pencil"></i></button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+}
+<button class="btn btn-primary" @onclick="CreateNewPerson">Create New Person</button>
+
+@code {
+    private IEnumerable<Person>? people;
+
+    protected override async Task OnInitializedAsync() 
+    {
+        people = await PersonService.GetPeople();
+    }
+
+    void ShowPerson(int id)
+    {
+        navigationManager.NavigateTo($"OnePerson/{id}");
+    }
+
+    void CreateNewPerson()
+    {
+        navigationManager.NavigateTo("OnePerson");
+    }
+}
